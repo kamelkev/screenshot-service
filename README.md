@@ -8,6 +8,10 @@ This is a work in progress, right now this service will accept a submitted html 
 and return back a rendering of said html through webkit. Moving forward the seemingly
 straightforward step of rendering a remote url will also be added.
 
+Right now the target platform is Linux. There is a chance that this can work elsewhere,
+but at least xvfb is tightly bound to Linux, and the font rendering is known to be less
+than ideal elsewhere as well.
+
 ## Setup
 
 You'll Django already up and running, and obviously WebKit (4.8.x should be fine)
@@ -30,8 +34,16 @@ Once you have the above handled you'll want to pull in Richard Penman's "webscra
 $ pip install webscraping
 ```
 
-Additionally you probably will want the ttf microsoft fonts for your flavor of UNIX, otherwise
-any generated renderings aren't going to look so hot.
+You will probably will want the ttf microsoft fonts for your flavor of UNIX, otherwise any
+generated renderings aren't going to look so hot.
+
+Finally you'll need to fire up a virtual framebuffer using xvfb. The application expects
+said buffer on :1, so:
+
+```
+$ /usr/bin/Xvfb :1 -screen 0 1024x768x24 -extension RANDR -ac +extension GLX +render -noreset
+
+```
 
 ## Usage
 
