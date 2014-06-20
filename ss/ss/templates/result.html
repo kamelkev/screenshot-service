@@ -1,0 +1,5 @@
+{{ scraped_url }}
+
+{% for color in colors %}
+  <div style="height:100px;margin:15px 0;background-color:{{ color.hex }};">{{color.prominence}}</div>
+{% endfor %}

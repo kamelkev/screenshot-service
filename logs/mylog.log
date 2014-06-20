@@ -1,0 +1,28 @@
+
+2014-06-20 01:03:32,719 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:03:32,725 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:07:45,616 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:07:45,621 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:07:47,444 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:07:47,449 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:12:45,856 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:12:45,862 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:23,599 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif
+2014-06-20 01:13:23,605 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:23,609 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/heading-bullet.gif
+2014-06-20 01:13:23,609 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:23,776 [DEBUG] webscraping.log: Error 203: the remote content was not found at the server (similar to HTTP error 404) (http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif)
+2014-06-20 01:13:31,026 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif
+2014-06-20 01:13:31,031 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:31,033 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/heading-bullet.gif
+2014-06-20 01:13:31,033 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:31,203 [DEBUG] webscraping.log: Error 203: the remote content was not found at the server (similar to HTTP error 404) (http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif)
+2014-06-20 01:13:37,555 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif
+2014-06-20 01:13:37,557 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:37,730 [DEBUG] webscraping.log: Error 203: the remote content was not found at the server (similar to HTTP error 404) (http://images.mailermailer.com/image/SYSTEM/103522/head-bullet.gif)
+2014-06-20 01:13:37,732 [DEBUG] webscraping.log: http://images.mailermailer.com/image/SYSTEM/103522/heading-bullet.gif
+2014-06-20 01:13:37,732 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:13:40,709 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:13:40,716 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
+2014-06-20 01:17:32,383 [DEBUG] webscraping.log: http://www.mailermailer.com/images/tmpl/mastheads/news_and_updates/newsletter.jpg
+2014-06-20 01:17:32,390 [DEBUG] webscraping.log: no access to protected functions or signals for objects not created from Python
