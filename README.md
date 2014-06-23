@@ -65,5 +65,4 @@ More to come...
 
 ## TODO
 
-* Add support for specifying returned image type and quality level (for jpg)
 * Add support for retrieving a remote URL
