@@ -6,11 +6,18 @@
     screenshot by file:<br/>
     <form action="/screenshot" method="POST" enctype="multipart/form-data">
       <input type="file" name="file"><br />
-      min width <input type="text" name="minwidth" value="" /><br />
-      min height <input type="text" name="minheight" value="" /><br />
+      format <select name="format">
+        <option value="jpg">jpg</option>
+        <option value="png">png</option>
+      </select><br/>
 
-      width <input type="text" name="width" value="" /><br />
-      height <input type="text" name="height" value="" /><br />
+      quality <input type="text" name="quality" value="" /><br />
+
+      min width <input type="text" name="minWidth" value="" /><br />
+      min height <input type="text" name="minHeight" value="" /><br />
+
+      width <input type="text" name="screenWidth" value="" /><br />
+      height <input type="text" name="screenHeight" value="" /><br />
       <input type="submit" name="submit" value="submit" />
     </form>
   </body>

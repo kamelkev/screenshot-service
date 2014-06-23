@@ -67,7 +67,15 @@ LOGGING = {
         'default': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../logs/mylog.log'),
+            'filename': os.path.join(BASE_DIR, '../logs/application.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },  
+        'webscraping': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '../logs/webscraping.log'),
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 5,
             'formatter':'standard',
@@ -86,7 +94,12 @@ LOGGING = {
         '': {
             'handlers': ['default'],
             'level': 'DEBUG',
-            'propagate': True
+            'propagate': False
+        },
+        'webscraping': {
+            'handlers': ['webscraping'],
+            'level': 'DEBUG',
+            'propagate': False
         },
         'django.request': {
             'handlers': ['request_handler'],

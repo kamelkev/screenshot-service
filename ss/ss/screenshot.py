@@ -1,6 +1,8 @@
 import os
 import sys
 import cStringIO
+import mimetypes
+import logging
 
 from webscraping import webkit
 from PyQt4.QtCore import Qt, QSize,QBuffer,QIODevice,QUrl
@@ -9,7 +11,12 @@ from PyQt4.QtWebKit import QWebView,QWebSettings
 
 class ScreenShotter(webkit.WebkitBrowser):
 
-    def __init__(self, gui=True, user_agent=None, proxy=None, load_images=True, forbidden_extensions=None, timeout=15, delay=0, enable_plugins=True, display=":1", screenWidth=0, screenHeight=0):
+    def __init__(self, gui=True, user_agent=None, proxy=None, load_images=True, forbidden_extensions=None, timeout=15, delay=0,
+                 enable_plugins=True, display=":1", screenWidth=None, screenHeight=None, minWidth=None, minHeight=None, format=None,
+                 quality=None):
+
+        logging.debug('Attempting to create Screenshot instance')
+
         os.environ["DISPLAY"] = display
 
         self.app = QApplication(sys.argv) # must instantiate first
@@ -28,9 +35,6 @@ class ScreenShotter(webkit.WebkitBrowser):
 
         self.setPage(webpage)
 
-        self.timeout = timeout
-        self.delay = delay
-
         # enable flash plugin etc.
         self.settings().setAttribute(QWebSettings.PluginsEnabled, enable_plugins)
         self.settings().setAttribute(QWebSettings.JavaEnabled, enable_plugins)
@@ -42,16 +46,39 @@ class ScreenShotter(webkit.WebkitBrowser):
 
         if gui: self.show() 
 
-        self.screenWidth = screenWidth
-        self.screenHeight = screenHeight
+        self.timeout = timeout
+        self.delay = delay
+
+        self.format = format if format == 'jpg' or format == 'png' else 'jpg' 
+        self.quality = quality if 0 <= quality <= 100 else 90 
+
+        self.content_type, self.encoding = mimetypes.guess_type('filename.' + self.format)
+
+        self.screenWidth = screenWidth or 1024
+        self.screenHeight = screenHeight or 768
+
+        self.minWidth = minWidth
+        self.minHeight = minHeight
+
+        logging.debug('Screenshot instance successfully created')
 
     def screenshot(self):
+        logging.debug('screenshot() invoked')
+
         frame = self.page().mainFrame()
         size = frame.contentsSize()
 
-        if (self.screenWidth or self.screenHeight):
+        if (self.screenWidth):
            size.setWidth(self.screenWidth)
+
+        if (self.screenHeight):
            size.setHeight(self.screenHeight)
+
+        if (self.minWidth and self.minWidth > self.screenWidth):
+           size.setWidth(self.minWidth)
+
+        if (self.minHeight and self.minHeight > self.screenHeight):
+           size.setHeight(self.minHeight)
 
         self.page().setViewportSize(size)
         image = QImage(self.page().viewportSize(), QImage.Format_ARGB32)
@@ -61,14 +88,19 @@ class ScreenShotter(webkit.WebkitBrowser):
 
         buffer = QBuffer()
         buffer.open(QIODevice.ReadWrite)
-        image.save(buffer, "JPG")
+        image.save(buffer, self.format, self.quality)
 
-        return buffer.data()
+        logging.debug('screenshot() returned image of type ' + self.content_type + ' of length ' + str(buffer.data().length()))
+        
+        return { 'content': buffer.data(), 'content_type': self.content_type }
 
     def screenshotHTML(self,html):
+        logging.debug('screenshotHTML() invoked')
+
         self.get(html = html, url='file://')
 
-        return self.screenshot()
+        screenshot = self.screenshot()
 
-if __name__ == '__main__':
-    print ""
+        logging.debug('screenshotHTML() successfully returned')
+
+        return screenshot

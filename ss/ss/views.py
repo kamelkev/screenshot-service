@@ -5,39 +5,48 @@ from django.views.decorators.csrf import csrf_exempt
 import sys
 import os
 import logging
+
 from PIL import Image
 
 from screenshot import ScreenShotter
 
-logger = logging.getLogger('default')
-
 @csrf_exempt
 def screenshot(request):
 
-    if request.method == 'POST':
+    logging.info('Screenshot request received')
 
-        if 'file' in request.FILES:
+    if request.method == 'POST' and 'file' in request.FILES:
+        try:
+            logging.info('Screenshot request being processed')
+
             file = request.FILES['file']
+
+            screenWidth = int(request.POST.get('screenWidth')) if request.POST.get('screenWidth') else None
+            screenHeight = int(request.POST.get('screenHeight')) if request.POST.get('screenHeight') else None
+            minWidth = int(request.POST.get('minWidth')) if request.POST.get('minWidth') else None
+            minHeight = int(request.POST.get('minHeight')) if request.POST.get('minHeight') else None
+            quality = int(request.POST.get('quality')) if request.POST.get('quality') else None
+            format = str(request.POST.get('format')) if request.POST.get('format') else None
             html = file.read()
 
-            try:
-                if (('width' in request.POST and request.POST['width']) or ('height' in request.POST and request.POST['height'])):
-                    screenshot = ScreenShotter(screenWidth = int(request.POST['width']), screenHeight = int(request.POST['height']))
-                    rendering = screenshot.screenshotHTML(html = html)
-                elif (('minwidth' in request.POST and request.POST['minwidth']) or ('minheight' in request.POST and request.POST['minheight'])):
-                    screenshot = ScreenShotter(screenWidth = request.POST['minwidth'], screenHeight = request.POST['minheight'])
-                    rendering = screenshot.screenshotHTML(html = html)
-                else:
-                    screenshot = ScreenShotter()
-                    rendering = screenshot.screenshotHTML(html = html)
+            screenshot = ScreenShotter(screenWidth = screenWidth, screenHeight = screenHeight, minWidth = minWidth, minHeight = minHeight, format = format, quality = quality)
+            rendering = screenshot.screenshotHTML(html = html)
 
-                return HttpResponse(rendering, content_type="image/jpeg")
+            logging.info('Screenshot request successfully processed')
 
-            except Exception, e:
-                return HttpResponse(e.args[0] + " " + type(e).__class__.__name__)
+            return HttpResponse(rendering['content'], content_type=rendering['content_type'])
 
-        else:
-            return HttpResponse('You submitted an empty form.')
+        except ValueError:
+            logging.error('Invalid arguments passed with request, returned 400')
+
+            return HttpResponse('Invalid arguments passed with request', status = 400)
+
+        except Exception, e:
+            logging.error(e.args[0] + " " + type(e).__class__.__name__ + " " + 'returned 400')
+
+            return HttpResponse(e.args[0] + " " + type(e).__class__.__name__, status = 400)
 
     else:
-        return HttpResponse('Invalid or unsupported request.')
+        logging.error('Invalid or unsupported request, returned 400')
+
+        return HttpResponse('Invalid or unsupported request', status = 400)
