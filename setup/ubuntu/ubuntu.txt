@@ -1,45 +1,12 @@
-This project was developed on Ubuntu 13.10
+Step by step instructions to building an environment and installing ss:
 
-There is little reason that this won't work on other variants of Linux, although Ubuntu is recommended due to
-the rendering improvements made by the Ubuntu team.
-
-Since Ubuntu is the "best" platform for this type of WebKit based X-renderer the following "from scratch" instructions
-are provided for anyone who might have trouble or want to build a VM to host this service:
-
-$ sudo apt-get install xvfb apache2 git  ttf-mscorefonts-installer fontconfig libapache2-mod-wsgi
+$ sudo apt-get install xvfb apache2 git ttf-mscorefonts-installer fontconfig libapache2-mod-wsgi
 $ sudo apt-get install python-imaging python-django python-pip python-sip python-qt4
 
 Sadly the ms fonts provided within the mscorefonts lacks tahoma, so that needs to be manually copied from somewhere,
 there are 2 files (tahomabd.ttf, tahoma.ttf) that need to be copied to: /usr/share/fonts/truetype/msttcorefonts
 
-Install init.d script to fire xvfb up on boot, contents of the file “xvfb”,make it executable
-
-======================
-XVFB=/usr/bin/Xvfb
-XVFBARGS=":1 -screen 0 1024x768x24 -extension RANDR -ac +extension GLX +render -noreset"
-PIDFILE=/var/run/xvfb.pid
-case "$1" in
-  start)
-    echo -n "Starting virtual X frame buffer: Xvfb"
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --exec $XVFB -- $XVFBARGS
-    echo "."
-    ;;
-  stop)
-    echo -n "Stopping virtual X frame buffer: Xvfb"
-    start-stop-daemon --stop --quiet --pidfile $PIDFILE
-    echo "."
-    ;;
-  restart)
-    $0 stop
-    $0 start
-    ;;
-  *)
-        echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
-        exit 1
-esac
-
-exit 0
-======================
+Copy the included xvfb init.d script to /etc/init.d, ensure it is marked executable
 
 Install the script into proper run levels
 $ sudo update-rc.d xvfb defaults 50 50
@@ -47,48 +14,15 @@ $ sudo update-rc.d xvfb defaults 50 50
 Install the backend web scraping library that wraps webkit:
 $ sudo pip install webscraping
 
-Create a service configuration file for apache under “/etc/apache2/sites-available/hostname.conf”, the contents should be:
+Copy the included hostname.conf file to /etc/apache2/hosts-available - make sure to rename the file to your hostname, once
+the file is in place edit the file and replace all references to "hostname" with your own hostname.
 
-======================
-WSGIDaemonProcess django processes=4 threads=1 python-path=/var/www/hostname/:/var/www/hostname/ss
-WSGIProcessGroup django
-WSGIRestrictEmbedded On
-WSGILazyInitialization On
-WSGIScriptAlias / /var/www/hostname/index.wsgi
-WSGIApplicationGroup %{GLOBAL}
+Once the configuration file is in place run the following:
+$ sudo a2ensite hostname.conf
 
-<VirtualHost *:80>
-        ServerName hostname
-        ServerAlias hostname
-</VirtualHost>
-======================
-
-Once the configuration file exists:
-sudo a2ensite hostname.conf
-sudo a2dismod mpm_event
-sudo a2enmod mpm_prefork
-
-Edit the apache mpm_prefork.conf file present under “/etc/apache2/mods-enabled/mpm_prefork.conf”, the contents should be:
-
-======================
-# prefork MPM
-# StartServers: number of server processes to start
-# MinSpareServers: minimum number of server processes which are kept spare
-# MaxSpareServers: maximum number of server processes which are kept spare
-# MaxRequestWorkers: maximum number of server processes allowed to start
-# MaxConnectionsPerChild: maximum number of requests a server process serves
-
-<IfModule mpm_prefork_module>
-        StartServers                     5
-        MinSpareServers           3
-        MaxSpareServers          8
-        MaxRequestWorkers         50
-        MaxConnectionsPerChild   0
-#       MaxRequestsPerChild     1
-</IfModule>
-
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
-======================
+Copy the included mpm_prefork.conf file to /etc/apache2/mods-available. Once the file is in place run the following:
+$ sudo a2dismod mpm_event
+$ sudo a2enmod mpm_prefork
 
 From here the application needs to be dropped in the appropriate /var/www/hostname directory, either through tar ball or direct checkout from git (preferred)
 
