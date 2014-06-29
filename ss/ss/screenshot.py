@@ -99,8 +99,17 @@ class ScreenShotter(webkit.WebkitBrowser):
 
         self.get(html = html, url='file://')
 
+        if (self.is_binary(html)):
+            raise ValueError('Expected text file for argument, received binary file')
+
         screenshot = self.screenshot()
 
         logging.debug('screenshotHTML() successfully returned')
 
         return screenshot
+
+    def is_binary(self, data):
+        textchars = ''.join(map(chr, [7,8,9,10,12,13,27] + range(0x20, 0x100)))
+        is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+
+        return is_binary_string(data)
