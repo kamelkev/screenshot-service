@@ -14,7 +14,7 @@ $ sudo update-rc.d xvfb defaults 50 50
 Install the backend web scraping library that wraps webkit:
 $ sudo pip install webscraping
 
-Copy the included hostname.conf file to /etc/apache2/hosts-available - make sure to rename the file to your hostname, once
+Copy the included hostname.conf file to /etc/apache2/sites-available - make sure to rename the file to your hostname, once
 the file is in place edit the file and replace all references to "hostname" with your own hostname.
 
 Once the configuration file is in place run the following:
@@ -24,7 +24,8 @@ Copy the included mpm_prefork.conf file to /etc/apache2/mods-available. Once the
 $ sudo a2dismod mpm_event
 $ sudo a2enmod mpm_prefork
 
-From here the application needs to be dropped in the appropriate /var/www/hostname directory, either through tar ball or direct checkout from git (preferred)
+From here the application needs to be dropped in the appropriate /var/www/hostname directory, either through tar ball or direct checkout from git (preferred):
+$ sudo git clone https://github.com/kamelkev/ss.git /var/www/hostname
 
 Finally log file ownership needs to be adjusted:
 $ sudo chown www-data:www-data /var/www/hostname/logs/mylog.log  /var/www/hostname/logs/django_request.log 
